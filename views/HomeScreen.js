@@ -1,5 +1,5 @@
 import { setStatusBarBackgroundColor, setStatusBarStyle } from "expo-status-bar";
-import { FlatList, Image, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import { FlatList, Image, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState, useEffect } from "react";
 import {
@@ -9,7 +9,7 @@ import {
     LibreBaskerville_700Bold
 } from '@expo-google-fonts/libre-baskerville'
 import SearchTextInput from "./sharedcomponents/SearchTextInput";
-import { ActivityIndicator, Button, ProgressBar, Searchbar, Snackbar } from "react-native-paper";
+import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../redux/reducer/recipeCategorySlice";
 import Spinner from "./sharedcomponents/Spinner";
@@ -63,14 +63,26 @@ const HomeScreen = ({ navigation }) => {
 //SearchButton
 const SearchButton = ({ onPress }) => {
     return (
-        <Button
-            style={styles.searchButton}
-            uppercase={false}
-            icon="magnify"
-            color="#938D8D"
-            onPress={onPress}>
-            Search category...
-        </Button>
+
+        <View
+            style={
+                {
+                    flexDirection: 'row',
+                    backgroundColor: '#fff'
+                }
+            }>
+            <Button
+                style={styles.searchButton}
+                contentStyle={{
+                    alignSelf: 'flex-start'
+                }}
+                uppercase={false}
+                icon="magnify"
+                color="#938D8D"
+                onPress={onPress}>
+                Search category...
+            </Button>
+        </View>
     )
 }
 
@@ -81,18 +93,6 @@ const HeaderText = () => {
             style={styles.header}>
             Categories
         </Text>
-    )
-}
-
-//LoadingView
-const CircularProgressBar = () => {
-    return (
-        <View
-            style={styles.loadingView}>
-            <ActivityIndicator
-                color="#EED34E"
-                style={styles.progressBar} />
-        </View>
     )
 }
 
@@ -190,6 +190,8 @@ const styles = StyleSheet.create({
     },
 
     header: {
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
         fontSize: 24,
         marginTop: 18,
         marginStart: 8,
@@ -199,6 +201,7 @@ const styles = StyleSheet.create({
     },
 
     searchButton: {
+        flex: 1,
         height: 40,
         fontSize: 14,
         backgroundColor: "#E0E0E0",
@@ -207,8 +210,6 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 24,
         borderTopLeftRadius: 24,
         margin: 8,
-        alignItems: 'flex-start',
-        justifyContent: 'center',
     },
 
     categoryList: {
