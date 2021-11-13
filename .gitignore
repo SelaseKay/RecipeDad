@@ -1,6 +1,11 @@
 node_modules/
+<<<<<<< HEAD
 .expo
 .vscode
+=======
+.expo/
+.expo-shared/
+>>>>>>> 942aed1b11b53716cddbcb628ea00e7e0b73384d
 dist/
 npm-debug.*
 *.jks
