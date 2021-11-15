@@ -1,4 +1,4 @@
-import { FlatList, Image, SafeAreaView, StyleSheet, Text, View } from "react-native"
+import { FlatList, Image, Linking, SafeAreaView, StyleSheet, Text, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import React, { useEffect } from "react"
 import { getRecipeDetail } from "../redux/reducer/recipeSearchSlice"
@@ -79,13 +79,15 @@ const IngredientItem = ({ ingredientText }) => {
 const RecipeSource = () => {
 
     const recipe = useSelector(state => state.recipeSearch.recipe)
+    let sourceUrl = recipe.source_url
 
     return (
         <View
             style={styles.recipeSource}>
             <Text
+                onPress={() => Linking.openURL(sourceUrl)}
                 style={styles.recipeSourceText}>
-                {recipe.source_url}
+                {sourceUrl}
             </Text>
 
         </View>
@@ -105,6 +107,9 @@ const IngredientsContainer = () => {
 
     return (
         <FlatList
+            style={{
+                padding: 8
+            }}
             data={recipe.ingredients}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()} />
@@ -165,8 +170,10 @@ const styles = StyleSheet.create({
     ingredientHeader: {
         marginTop: 8,
         marginStart: 8,
-        marginBottom: 8,
         borderRadius: 16,
+        paddingVertical: 4,
+        paddingHorizontal: 16,
+        alignSelf: 'baseline',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: "#F0A174"
@@ -174,8 +181,8 @@ const styles = StyleSheet.create({
 
     ingredientHeaderText: {
         fontSize: 16,
-        marginStart: 8,
-        marginTop: 4,
+        alignSelf: 'center',
+        justifyContent: 'center',
         color: "#fff"
     },
 
