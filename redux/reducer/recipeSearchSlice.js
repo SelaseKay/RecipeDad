@@ -4,6 +4,7 @@ const INITiAL_STATE = {
     searchedRecipes: [],
     errorMessage: "",
     connection: true,
+    recipe: {},
     isLoading: false,
 }
 
@@ -23,6 +24,9 @@ export const recipeSearchSlice = createSlice({
         setErrorMessage(state, action){
             state.errorMessage = action.payload
         },
+        getRecipeDetail(state, action){
+            state.recipe = action.payload
+        },
         getSearchedRecipes(state, action) {
             state.searchedRecipes = action.payload
         }
@@ -34,6 +38,7 @@ export const {
     setErrorMessage,
     refreshRecipes,
     setConnection,
+    getRecipeDetail,
     getSearchedRecipes
 } = recipeSearchSlice.actions
 export default recipeSearchSlice.reducer

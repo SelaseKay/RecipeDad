@@ -2,16 +2,14 @@ import React, { useEffect, useRef } from "react"
 import { StyleSheet } from "react-native"
 import { TextInput } from "react-native-paper"
 
-const SearchTextInput = ({onChangeText, onSubmitEditing}) => {
+const SearchTextInput = ({ value, onChangeText, onSubmitEditing }) => {
 
     const inputRef = useRef()
     useEffect(() => {
         inputRef.current.focus()
     }, [])
 
-    // const handleSearchKeyPressed = (e) => {
-    //     console.log("handleSearchKeyPressed: ", "search button pressed")
-    // }
+    console.log("value1", value)
 
     return (
         <TextInput
@@ -19,6 +17,7 @@ const SearchTextInput = ({onChangeText, onSubmitEditing}) => {
             style={styles.input}
             placeholder="Search category..."
             placeholderTextColor="#938D8D"
+            value={value}
             selectionColor="#EC841C"
             onSubmitEditing={onSubmitEditing}
             returnKeyType="search"

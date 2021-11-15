@@ -49,10 +49,15 @@ const HomeScreen = ({ navigation }) => {
             style={styles.container}>
             <SearchButton
                 onPress={() => {
-                    navigation.navigate('Search')
+                    navigation.navigate('Search',{
+                        title: ""
+                    })
                 }} />
             <HeaderText />
-            <CategoryList />
+            <CategoryList
+                onPressItem={title => {
+                    navigation.navigate('Search', {title: title})
+                }} />
         </SafeAreaView>
     )
 }
@@ -96,23 +101,6 @@ const HeaderText = () => {
     )
 }
 
-//Category Item
-const CategoryItem = ({ uri, title }) => {
-    return (
-        <View
-            style={styles.categoryItemContainer}>
-            <Image
-                style={styles.categoryItem}
-                source={{
-                    uri: uri
-                }} />
-            <Text style={styles.categoryTitle}>
-                {title}
-            </Text>
-        </View>
-    )
-}
-
 //Error View
 const ErrorView = () => {
 
@@ -132,8 +120,31 @@ const ErrorView = () => {
     )
 }
 
+//Category Item
+const CategoryItem = ({ uri, title, onPress }) => {
+    return (
+        <View
+            style={styles.categoryItemContainer}>
+            <TouchableOpacity
+                onPress={
+                    onPress
+                }>
+                <Image
+                    style={styles.categoryItem}
+                    source={{
+                        uri: uri
+                    }} />
+                <Text style={styles.categoryTitle}>
+                    {title}
+                </Text>
+            </TouchableOpacity>
+        </View>
+    )
+}
+
+
 //Category list
-const CategoryList = () => {
+const CategoryList = ({ onPressItem }) => {
 
     const isConnectionAvailable = useSelector(state => state.recipeCategory.connection)
     const recipes = useSelector(state => state.recipeCategory.recipes)
@@ -153,6 +164,7 @@ const CategoryList = () => {
 
     const renderItem = ({ item }) => (
         <CategoryItem
+            onPress={() => onPressItem(item.title)}
             uri={item.imageUrl}
             title={item.title} />
     )

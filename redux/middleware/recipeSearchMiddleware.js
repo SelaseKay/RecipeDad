@@ -1,6 +1,6 @@
 import axios from "axios"
-import { RECIPE_URL } from "../../config/url"
-import { getSearchedRecipes, setConnection, setErrorMessage, setIsLoading } from "../reducer/recipeSearchSlice"
+import { RECIPE_DETAIL_URL, RECIPE_URL } from "../../config/url"
+import { getRecipeDetail, getSearchedRecipes, setConnection, setErrorMessage, setIsLoading } from "../reducer/recipeSearchSlice"
 
 export default recipeSearchMiddleware = storeApi => next => action => {
 
@@ -21,6 +21,16 @@ export default recipeSearchMiddleware = storeApi => next => action => {
             })
         next(setIsLoading(true))
         return
+    }
+
+    if (action.type === "recipeSearch/getRecipeDetail") {
+        axios.get(`${RECIPE_DETAIL_URL}${action.payload}`)
+            .then(function(response){
+                next(getRecipeDetail(response.data.recipe))
+            })
+            .catch(function(error){
+                console.log("error", error.message)
+            })
     }
     return next(action)
 

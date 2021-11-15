@@ -1,23 +1,33 @@
 import { FlatList, Image, SafeAreaView, StyleSheet, Text, View } from "react-native"
+import { useDispatch, useSelector } from "react-redux"
+import React, { useEffect } from "react"
+import { getRecipeDetail } from "../redux/reducer/recipeSearchSlice"
 
 const DetailScreen = ({ route, navigation }) => {
+
     return (
         <SafeAreaView
             style={styles.container}>
             <ScreenHeader />
-            <RecipeDetailsContainer/>
+            <RecipeDetailsContainer />
         </SafeAreaView>
     )
 }
 
 //DetailScreen components
 
-const ScreenHeader = ({ uri, recipeTitle }) => {
+const ScreenHeader = () => {
+
+    const recipe = useSelector(state => state.recipeSearch.recipe)
+
+    console.log("recipe", recipe)
+
+
     return (
         <View
             style={styles.screenHeader}>
-            <RecipeImage uri={uri} />
-            <RecipeTitle recipeTitle={recipeTitle} />
+            <RecipeImage uri={recipe.image_url} />
+            <RecipeTitle recipeTitle={recipe.title} />
         </View>
     )
 }
@@ -66,20 +76,25 @@ const IngredientItem = ({ ingredientText }) => {
     )
 }
 
-const RecipeSource = ({ uriLink }) => {
+const RecipeSource = () => {
+
+    const recipe = useSelector(state => state.recipeSearch.recipe)
+
     return (
         <View
             style={styles.recipeSource}>
             <Text
                 style={styles.recipeSourceText}>
-                {uriLink}
+                {recipe.source_url}
             </Text>
 
         </View>
     )
 }
 
-const IngredientsContainer = ({ data }) => {
+const IngredientsContainer = () => {
+
+    const recipe = useSelector(state => state.recipeSearch.recipe)
 
     const renderItem = ({ item }) => {
         return (
@@ -90,22 +105,20 @@ const IngredientsContainer = ({ data }) => {
 
     return (
         <FlatList
-            data={data}
+            data={recipe.ingredients}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()} />
     )
 }
 
-const RecipeDetailsContainer = ({ data, uriLink }) => {
+const RecipeDetailsContainer = ({ uriLink }) => {
     return (
         <View
             style={styles.recipeDetailContainer}>
             <IngredientHeader
                 headerText="Ingredients" />
-            <IngredientsContainer
-                data={data} />
-            <RecipeSource
-                uriLink={uriLink} />
+            <IngredientsContainer />
+            <RecipeSource />
         </View>
     )
 }
@@ -120,7 +133,8 @@ const styles = StyleSheet.create({
     },
 
     recipeImage: {
-        hieght: 192,
+        flex: 3,
+        marginTop: 30,
         marginHorizontal: 8,
         resizeMode: 'contain'
     },
@@ -134,7 +148,11 @@ const styles = StyleSheet.create({
     },
 
     screenHeader: {
-        flex: 2
+        backgroundColor: "#E5E5E5",
+        flex: 2,
+        margin: 8,
+        padding: 8,
+        borderRadius: 16,
     },
 
     dot: {
@@ -145,13 +163,19 @@ const styles = StyleSheet.create({
     },
 
     ingredientHeader: {
-        height: 32,
         marginTop: 8,
+        marginStart: 8,
+        marginBottom: 8,
+        borderRadius: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: "#F0A174"
     },
 
     ingredientHeaderText: {
         fontSize: 16,
+        marginStart: 8,
+        marginTop: 4,
         color: "#fff"
     },
 
@@ -163,25 +187,28 @@ const styles = StyleSheet.create({
 
     ingredientItem: {
         flexDirection: 'row',
-        marginStart: 8
+        marginStart: 16
     },
 
     recipeSource: {
-        height: 32,
         marginBottom: 8,
+        marginHorizontal: 8,
+        borderRadius: 16,
         backgroundColor: "#fff"
     },
 
     recipeSourceText: {
         fontSize: 16,
+        margin: 8,
         color: "#267DE3",
         textDecorationLine: 'underline',
         textDecorationColor: "#267DE3"
     },
 
     recipeDetailContainer: {
-        flex: 4,
+        flex: 3.5,
         borderRadius: 24,
+        margin: 8,
         backgroundColor: "#F4EAE4"
     }
 

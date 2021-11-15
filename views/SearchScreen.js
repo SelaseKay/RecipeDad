@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import { FlatList, Image, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
-import { getSearchedRecipes, refreshRecipes } from "../redux/reducer/recipeSearchSlice";
+import { getRecipeDetail, getSearchedRecipes, refreshRecipes } from "../redux/reducer/recipeSearchSlice";
 import showRetryingToast from "../util/retryToast";
 import RetryView from "./sharedcomponents/RetryView";
 import SearchTextInput from "./sharedcomponents/SearchTextInput";
@@ -11,9 +11,16 @@ import Spinner from "./sharedcomponents/Spinner";
 const SearchScreen = ({ route, navigation }) => {
     const dispatch = useDispatch()
     const [inputText, setInputText] = useState('')
+    const { title } = route.params
 
     useEffect(() => {
-        dispatch(refreshRecipes())
+        if (title !== "") {
+            setInputText(title)
+            dispatch(getSearchedRecipes(title))
+        }
+        else {
+            dispatch(refreshRecipes())
+        }
     }, [])
 
     const handleSearchKeyPressed = (e) => {
@@ -41,7 +48,12 @@ const SearchScreen = ({ route, navigation }) => {
                 onRetry={() => {
                     showRetryingToast()
                     dispatch(getSearchedRecipes(inputText.trim()))
-                }} />
+                }}
+                onPressItem={id => {
+                    navigation.navigate('Detail')
+                    dispatch(getRecipeDetail(id))
+                }}
+            />
         </SafeAreaView>
     )
 }
@@ -76,7 +88,7 @@ const ErrorView = ({ onRetry, visible }) => {
 }
 
 // Search Result List
-const SearchResultList = ({ onRetry }) => {
+const SearchResultList = ({ onRetry, onPressItem }) => {
 
     const isConnectionAvailable = useSelector(state => state.recipeSearch.connection)
     const searchedRecipes = useSelector(state => state.recipeSearch.searchedRecipes)
@@ -108,6 +120,7 @@ const SearchResultList = ({ onRetry }) => {
 
     const renderItem = ({ item }) => (
         <RecipeItem
+            onPress={() => onPressItem(item.id)}
             uri={item.imageUrl}
             title={item.title} />
     )
@@ -122,20 +135,22 @@ const SearchResultList = ({ onRetry }) => {
 
 
 //Recipe Item
-const RecipeItem = ({ uri, title }) => {
+const RecipeItem = ({ uri, title, onPress }) => {
     return (
         <View
             style={styles.recipeItemContainer}>
-            <Image
-                style={styles.recipeImage}
-                source={{
-                    uri: uri
-                }} />
-            <Text
-                style={styles.recipeItemTitle}>
-                {title}
-            </Text>
-
+            <TouchableOpacity
+                onPress={onPress}>
+                <Image
+                    style={styles.recipeImage}
+                    source={{
+                        uri: uri
+                    }} />
+                <Text
+                    style={styles.recipeItemTitle}>
+                    {title}
+                </Text>
+            </TouchableOpacity>
         </View>
     )
 }
